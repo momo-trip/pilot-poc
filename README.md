@@ -81,23 +81,54 @@ with chained offset dependencies.
 Note: This is a **simplified** ~330-line parser. FFmpeg's actual MP4 
 demuxer is orders of magnitude more complex.
 
-## KLEE Results (1-hour run)
 
-TODO: Run with `klee --max-time=3600` and fill in results.
+## KLEE Results (1-hour run)
 
 ```bash
 rm -rf klee-out-* klee-last
 klee --max-time=3600 --max-memory=4096 concolic_mp4_demo.bc
 ```
 
-| Metric | Value |
-|---|---|
-| Execution time | TODO |
-| Explored paths | TODO |
-| SMT queries | TODO |
-| Avg. constraints per query | TODO |
-| Generated test cases | TODO |
-| **Target function reached** | TODO |
+```
+KLEE: output directory is "/work/klee-out-0"
+KLEE: Using STP solver backend
+KLEE: SAT solver: MiniSat
+KLEE: HaltTimer invoked
+KLEE: halting execution, dumping remaining states
+KLEE: done: explored paths = 863
+KLEE: done: avg. constructs per query = 1172
+KLEE: done: total queries = 2686
+KLEE: done: valid queries = 1746
+KLEE: done: invalid queries = 940
+KLEE: done: query cex = 2686
+KLEE: done: total instructions = 50379
+KLEE: done: completed paths = 490
+KLEE: done: partially completed paths = 373
+KLEE: done: generated tests = 863
+```
+
+```bash
+$ ls klee-last/*.assert.err 2>/dev/null | wc -l
+0
+$ ls klee-last/*.err 2>/dev/null | wc -l
+0
+```
+
+| Metric | 5 min | 1 hour | Scaling |
+|---|---|---|---|
+| Execution time | 5 min | 60 min | 12x |
+| Explored paths | 244 | 863 | 3.5x |
+| SMT queries | 735 | 2,686 | 3.7x |
+| Avg. constraints per query | 732 | 1,172 | 1.6x |
+| Generated test cases | 244 | 863 | 3.5x |
+| **Target function reached** | **No** | **No** | — |
+
+With 12x more time, KLEE explored only 3.5x more paths. The average
+constraint complexity grew from 732 to 1,172, indicating that deeper
+exploration produces increasingly complex SMT queries without progress
+toward the target — a classic symptom of path explosion in nested
+data structure parsing.
+
 
 
 ## ConcoLLMic ()

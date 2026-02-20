@@ -99,6 +99,36 @@ klee --max-time=3600 --max-memory=4096 concolic_mp4_demo.bc
 | Generated test cases | TODO |
 | **Target function reached** | TODO |
 
+
+## ConcoLLMic ()
+ConcoLLMic replaces the SMT solver with an LLM (Claude Sonnet 4.5) while retaining the concolic execution framework: execute the program, collect path constraints from branch conditions, and ask the LLM to solve these constraints to generate a new input.
+
+### Rounds = 5
+python3.12 ACE.py run \
+    --project_dir ./code_example/instr/ \
+    --execution ./code_example/harness/concolic_mp4_demo.py \
+    --out ./out_mp4/ \
+    --rounds 5 \
+    --parallel_num 3
+
+
+### Rounds = unlimited
+python3.12 ACE.py run \
+    --project_dir ./code_example/instr/ \
+    --execution ./code_example/harness/concolic_mp4_demo.py \
+    --out ./out_mp4_unlimited/ \
+    --plateau_slot 30 \
+    --parallel_num 3
+
+
+python3.12 ACE.py run \
+    --project_dir ./code_example/instr/ \
+    --resume_in ./out_mp4/ \
+    --out ./out_mp4_resumed/ \
+    --plateau_slot 30 \
+    --parallel_num 3
+
+
 ## PILOT Approach (for comparison)
 
 ```bash

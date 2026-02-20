@@ -5,3 +5,5 @@ KLEE: Deterministic allocator: globals (start-address=0x7faeb4595000 size=10 GiB
 KLEE: Deterministic allocator: constants (start-address=0x7fac34595000 size=10 GiB)
 KLEE: Deterministic allocator: heap (start-address=0x7eac34595000 size=1024 GiB)
 KLEE: Deterministic allocator: stack (start-address=0x7e8c34595000 size=128 GiB)
+KLEE: HaltTimer invoked
+KLEE: halting execution, dumping remaining states
